@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { Star, ShoppingCart, Eye } from "lucide-react";
 import Link from "next/link"; // যদি View Details page এ navigate করতে চাও
+import AddToCartBtn from "../buttons/AddToCartBtn";
 
 const ProductCard = ({ product }) => {
   const discountedPrice =
@@ -53,13 +54,7 @@ const ProductCard = ({ product }) => {
       {/* Buttons */}
       <div className="flex gap-2 mt-auto">
         {/* Add to Cart */}
-        <button
-          type="button"
-          className="flex-1 flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition shadow"
-        >
-          <ShoppingCart size={18} />
-          Add to Cart
-        </button>
+        {/* <AddToCartBtn product={product}></AddToCartBtn> */}
 
         {/* View Details */}
         <Link

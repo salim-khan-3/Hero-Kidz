@@ -60,9 +60,11 @@ const Navbar = () => {
               </span>
             </Link>
 
-            <button className="bg-blue-600 hidden md:block hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg active:scale-95">
-              Login
-            </button>
+            <Link className="cursor-pointer" href={"/login"}>
+              <button className="bg-blue-600 hidden md:block hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg active:scale-95">
+                Login
+              </button>
+            </Link>
           </div>
 
           {/* Mobile Menu Button - Shudhu mobile-e dekhabe */}
@@ -128,11 +130,11 @@ const Navbar = () => {
             </Link>
           </div>
           <div className="flex items-center gap-4 block md:hidden">
-
-
-            <button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg active:scale-95">
-              Login
-            </button>
+            <Link className="cursor-pointer" href={"/login"}>
+              <button className="bg-blue-600 hidden md:block hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg active:scale-95">
+                Login
+              </button>
+            </Link>
           </div>
         </div>
       )}

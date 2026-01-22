@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Star, ShoppingCart } from "lucide-react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
+import AddToCartBtn from "@/components/buttons/AddToCartBtn";
 
 const ProductDetailsPage = () => {
   const { productId } = useParams();
@@ -134,10 +135,7 @@ const ProductDetailsPage = () => {
 
       {/* Add to Cart Button */}
       <div className="flex flex-col md:flex-row gap-4 mt-8 sticky bottom-4 md:static">
-        <button className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl transition-all shadow-lg active:scale-95 flex items-center justify-center gap-2">
-          <ShoppingCart size={20} />
-          Add to Cart
-        </button>
+        <AddToCartBtn product={product}></AddToCartBtn>
       </div>
     </div>
   );
