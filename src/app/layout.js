@@ -2,7 +2,7 @@ import "./globals.css";
 
 import Footer from "@/components/layouts/Footer";
 import Navbar from "@/components/layouts/Navbar";
-
+import NextAuthProvider from "@/provider/NextAuthProvider";
 
 export const metadata = {
   title: "Hero Kidz",
@@ -11,16 +11,14 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body
-        className="flex flex-col min-h-screen"
-      >
-        <Navbar></Navbar>
-        <main className="flex-grow">
-          {children}
-        </main>
-        <Footer></Footer>
-      </body>
-    </html>
+    <NextAuthProvider>
+      <html lang="en">
+        <body className="flex flex-col min-h-screen">
+          <Navbar></Navbar>
+          <main className="flex-grow">{children}</main>
+          <Footer></Footer>
+        </body>
+      </html>
+    </NextAuthProvider>
   );
 }

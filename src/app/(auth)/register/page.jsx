@@ -2,7 +2,7 @@
 
 
 import React from "react";
-import { Mail, Lock, User, Chrome } from "lucide-react"; // Optional: Install lucide-react for icons
+ // Optional: Install lucide-react for icons
 import { useForm } from "react-hook-form";
 import { postUser } from "@/actions/server/auth";
 import { useRouter } from "next/navigation";
@@ -15,15 +15,21 @@ const RegisterPage = () => {
     formState: { errors, isSubmitting },
   } = useForm();
 
-  const onSubmit = async (data) => {
-    const result = await postUser(data);
-    if(result.acknowledged){
-      alert("User registered successfully!");
-      router.push('/login');
-    }
+// ... আগের ইমপোর্টগুলো
 
-  };
-
+// RegisterPage.jsx এর ভেতরে
+const onSubmit = async (data) => {
+  const result = await postUser(data);
+  
+  // result? ব্যবহার করলে result null হলেও error দেবে না
+  if (result?.acknowledged) {
+    alert("User registered successfully!");
+    router.push('/login');
+  } else {
+    console.log("Server response was:", result);
+    alert("Registration failed! Check server logs.");
+  }
+};
   return (
     <div className="min-h-screen bg-slate-50 flex items-center justify-center p-6">
       <div className="w-full max-w-md bg-white rounded-3xl shadow-xl shadow-slate-200/60 p-8 border border-slate-100">
@@ -45,7 +51,7 @@ const RegisterPage = () => {
             <input
               type="text"
               placeholder="John Doe"
-              {...register("fullName", {
+              {...register("name", {
                 required: "Full name is required",
                 minLength: {
                   value: 3,

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { CiShoppingCart } from "react-icons/ci";
+import AuthButtons from "../buttons/AuthButtons";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -60,11 +61,7 @@ const Navbar = () => {
               </span>
             </Link>
 
-            <Link className="cursor-pointer" href={"/login"}>
-              <button className="bg-blue-600 hidden md:block hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg active:scale-95">
-                Login
-              </button>
-            </Link>
+            <AuthButtons></AuthButtons>
           </div>
 
           {/* Mobile Menu Button - Shudhu mobile-e dekhabe */}
@@ -130,11 +127,7 @@ const Navbar = () => {
             </Link>
           </div>
           <div className="flex items-center gap-4 block md:hidden">
-            <Link className="cursor-pointer" href={"/login"}>
-              <button className="bg-blue-600 hidden md:block hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg active:scale-95">
-                Login
-              </button>
-            </Link>
+            <AuthButtons></AuthButtons>
           </div>
         </div>
       )}

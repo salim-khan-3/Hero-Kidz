@@ -1,42 +1,92 @@
-'use client';
+"use client";
 
-import React from 'react';
-import Link from 'next/link';
+import React from "react";
+import Link from "next/link";
+import { useForm } from "react-hook-form";
+import { signIn } from "next-auth/react";
+import Swal from "sweetalert2";
+import { useRouter } from "next/navigation";
 
 const LoginPage = () => {
-    return (
-<div className="min-h-screen bg-slate-50 flex items-center justify-center p-6">
+  const router = useRouter();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm();
+
+  const onSubmit = async(data) => {
+    console.log(data);
+    const result = await signIn("credentials",{
+      email:data.email,
+      password:data.password,
+      redirect: false
+    })
+    console.log(result);
+    if(!result.ok){
+      Swal.fire("error", "Email password not matched", "errpr")
+    }else{
+      Swal.fire("success", "Login successful", "success")
+      router.push("/")
+    }
+  };
+  return (
+    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-6">
       <div className="w-full max-w-md bg-white rounded-3xl shadow-xl shadow-slate-200/60 p-8 border border-slate-100">
-        
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-slate-800">Welcome Back</h1>
-          <p className="text-slate-500 mt-2">Please enter your details to sign in.</p>
+          <p className="text-slate-500 mt-2">
+            Please enter your details to sign in.
+          </p>
         </div>
 
         {/* Form */}
-        <form className="space-y-5">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+           {/* Email */}
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1 ml-1">Email Address</label>
-            <input 
-              type="email" 
+            <label className="text-sm font-medium">Email Address</label>
+            <input
+              type="email"
               placeholder="name@company.com"
-              className="w-full pl-4 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all"
-              required
+              className="w-full p-3 border rounded-xl"
+              {...register('email', { required: 'Email is required' })}
             />
+            {errors.email && (
+              <p className="text-red-500 text-xs mt-1">
+                {errors.email.message}
+              </p>
+            )}
           </div>
 
           <div>
             <div className="flex justify-between items-center mb-1 ml-1">
-              <label className="block text-sm font-medium text-slate-700">Password</label>
-              <Link href="#" className="text-xs text-indigo-600 hover:underline">Forgot password?</Link>
+              <label className="block text-sm font-medium text-slate-700">
+                Password
+              </label>
+              <Link
+                href="#"
+                className="text-xs text-indigo-600 hover:underline"
+              >
+                Forgot password?
+              </Link>
             </div>
-            <input 
-              type="password" 
+              {/* Password */}
+          <div>
+            <label className="text-sm font-medium">Password</label>
+            <input
+              type="password"
               placeholder="••••••••"
-              className="w-full pl-4 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all"
-              required
+              className="w-full p-3 border rounded-xl"
+              {...register('password', { required: 'Password is required' })}
             />
+            {errors.password && (
+              <p className="text-red-500 text-xs mt-1">
+                {errors.password.message}
+              </p>
+            )}
+          </div>
+
           </div>
 
           <button className="w-full bg-indigo-600 cursor-pointer hover:bg-indigo-700 text-white font-semibold py-3 rounded-xl shadow-lg shadow-indigo-200 transition-all active:scale-[0.98]">
@@ -50,26 +100,38 @@ const LoginPage = () => {
             <div className="w-full border-t border-slate-200"></div>
           </div>
           <div className="relative flex justify-center text-sm">
-            <span className="px-2 bg-white text-slate-500">Or sign in with</span>
+            <span className="px-2 bg-white text-slate-500">
+              Or sign in with
+            </span>
           </div>
         </div>
 
         {/* Social Button */}
         <button className="w-full cursor-pointer flex items-center justify-center gap-3 bg-white border border-slate-200 py-3 rounded-xl hover:bg-slate-50 transition-all font-medium text-slate-700">
-          <img src="https://www.svgrepo.com/show/475656/google_color.svg" className="w-5 h-5" alt="Google" />
+          <img
+            src="https://www.svgrepo.com/show/475656/google_color.svg"
+            className="w-5 h-5"
+            alt="Google"
+          />
           Google
         </button>
 
         {/* Footer */}
         <p className="text-center text-slate-600 mt-8 text-sm">
-          Don't have an account?{' '}
-          <Link href="/register" className="text-indigo-600 cursor-pointer font-bold hover:underline underline-offset-4">
+          Don't have an account?{" "}
+          <Link
+            href="/register"
+            className="text-indigo-600 cursor-pointer font-bold hover:underline underline-offset-4"
+          >
             Register
           </Link>
         </p>
       </div>
     </div>
-    );
+  );
 };
 
 export default LoginPage;
+
+
+

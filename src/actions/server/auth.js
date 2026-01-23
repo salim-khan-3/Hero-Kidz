@@ -35,3 +35,18 @@ export const postUser = async (payload) => {
         }
     }
 }
+
+
+export const loginUser = async (payload) => {
+    const {email, password, name} = payload;
+    if(!email || !password ) return null;
+    const user = await dbConnect(collections.USERS).findOne({email});
+    if(!user) return null;
+
+    const isMatched = await bcrypt.compare(password, user.password);
+    if(isMatched){
+        return user;
+    }else{
+        return null;
+    }
+}
