@@ -5,29 +5,34 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { signIn } from "next-auth/react";
 import Swal from "sweetalert2";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import Image from "next/image";
+import { Fa0, FaGoogle } from "react-icons/fa6";
+import SocialLogin from "@/components/buttons/SocialLogin";
 
 const LoginPage = () => {
   const router = useRouter();
+  const params = useSearchParams();
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm();
 
-  const onSubmit = async(data) => {
+  const onSubmit = async (data) => {
     console.log(data);
-    const result = await signIn("credentials",{
-      email:data.email,
-      password:data.password,
-      redirect: false
-    })
+    const result = await signIn("credentials", {
+      email: data.email,
+      password: data.password,
+      redirect:false,
+      callbackUrl: params.get("callbackUrl") || "/",
+    });
     console.log(result);
-    if(!result.ok){
-      Swal.fire("error", "Email password not matched", "errpr")
-    }else{
-      Swal.fire("success", "Login successful", "success")
-      router.push("/")
+    if (!result.ok) {
+      Swal.fire("error", "Email password not matched", "errpr");
+    } else {
+      Swal.fire("success", "Login successful", "success");
+      router.push(params.get("callbackUrl") || "/");
     }
   };
   return (
@@ -43,14 +48,14 @@ const LoginPage = () => {
 
         {/* Form */}
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-           {/* Email */}
+          {/* Email */}
           <div>
             <label className="text-sm font-medium">Email Address</label>
             <input
               type="email"
               placeholder="name@company.com"
               className="w-full p-3 border rounded-xl"
-              {...register('email', { required: 'Email is required' })}
+              {...register("email", { required: "Email is required" })}
             />
             {errors.email && (
               <p className="text-red-500 text-xs mt-1">
@@ -71,22 +76,21 @@ const LoginPage = () => {
                 Forgot password?
               </Link>
             </div>
-              {/* Password */}
-          <div>
-            <label className="text-sm font-medium">Password</label>
-            <input
-              type="password"
-              placeholder="••••••••"
-              className="w-full p-3 border rounded-xl"
-              {...register('password', { required: 'Password is required' })}
-            />
-            {errors.password && (
-              <p className="text-red-500 text-xs mt-1">
-                {errors.password.message}
-              </p>
-            )}
-          </div>
-
+            {/* Password */}
+            <div>
+              <label className="text-sm font-medium">Password</label>
+              <input
+                type="password"
+                placeholder="••••••••"
+                className="w-full p-3 border rounded-xl"
+                {...register("password", { required: "Password is required" })}
+              />
+              {errors.password && (
+                <p className="text-red-500 text-xs mt-1">
+                  {errors.password.message}
+                </p>
+              )}
+            </div>
           </div>
 
           <button className="w-full bg-indigo-600 cursor-pointer hover:bg-indigo-700 text-white font-semibold py-3 rounded-xl shadow-lg shadow-indigo-200 transition-all active:scale-[0.98]">
@@ -107,20 +111,13 @@ const LoginPage = () => {
         </div>
 
         {/* Social Button */}
-        <button className="w-full cursor-pointer flex items-center justify-center gap-3 bg-white border border-slate-200 py-3 rounded-xl hover:bg-slate-50 transition-all font-medium text-slate-700">
-          <img
-            src="https://www.svgrepo.com/show/475656/google_color.svg"
-            className="w-5 h-5"
-            alt="Google"
-          />
-          Google
-        </button>
+        <SocialLogin></SocialLogin>
 
         {/* Footer */}
         <p className="text-center text-slate-600 mt-8 text-sm">
-          Don't have an account?{" "}
+          Dont have an account?{" "}
           <Link
-            href="/register"
+            href={`/register?callbackUrl=${params.get("callbackUrl") || "/"}`}
             className="text-indigo-600 cursor-pointer font-bold hover:underline underline-offset-4"
           >
             Register
@@ -132,6 +129,3 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
-
-
-

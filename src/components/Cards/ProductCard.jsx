@@ -4,6 +4,7 @@ import Link from "next/link"; // যদি View Details page এ navigate কর
 import AddToCartBtn from "../buttons/AddToCartBtn";
 
 const ProductCard = ({ product }) => {
+  const {title, image, price, ratings, reviews,sold, _id} = product;
   const discountedPrice =
     product.price - (product.price * product.discount) / 100;
 
@@ -52,14 +53,14 @@ const ProductCard = ({ product }) => {
       </div>
 
       {/* Buttons */}
-      <div className="flex gap-2 mt-auto">
+      <div className="">
         {/* Add to Cart */}
-        {/* <AddToCartBtn product={product}></AddToCartBtn> */}
+        <AddToCartBtn product={{...product, _id:_id.toString()}}></AddToCartBtn>
 
         {/* View Details */}
         <Link
           href={`/products/${product._id}`} // product details page route
-          className="flex-1 flex items-center justify-center gap-2 border border-blue-600 text-blue-600 hover:bg-blue-50 font-semibold py-2 px-4 rounded-lg transition"
+          className="flex-1 mt-4 flex items-center justify-center gap-2 border border-blue-600 text-blue-600 hover:bg-blue-50 font-semibold py-2 px-4 rounded-lg transition"
         >
           <Eye size={18} />
           View Details

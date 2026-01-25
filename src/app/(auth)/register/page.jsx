@@ -1,35 +1,45 @@
 "use client";
 
-
 import React from "react";
- // Optional: Install lucide-react for icons
+import { signIn } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import { postUser } from "@/actions/server/auth";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { FaGoogle } from "react-icons/fa6";
+import Swal from "sweetalert2";
+import SocialLogin from "@/components/buttons/SocialLogin";
 // import { useRouter } from "next/router";
 const RegisterPage = () => {
-  const router = useRouter()
+  const router = useRouter();
+  const params = useSearchParams();
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm();
 
-// ... আগের ইমপোর্টগুলো
-
-// RegisterPage.jsx এর ভেতরে
 const onSubmit = async (data) => {
   const result = await postUser(data);
-  
-  // result? ব্যবহার করলে result null হলেও error দেবে না
-  if (result?.acknowledged) {
-    alert("User registered successfully!");
-    router.push('/login');
-  } else {
-    console.log("Server response was:", result);
-    alert("Registration failed! Check server logs.");
+
+  if (!result.success) {
+    Swal.fire("Error", result.message || "Registration failed", "error");
+    return;
+  }
+
+  const loginResult = await signIn("credentials", {
+    email: data.email,
+    password: data.password,
+    redirect: false,
+    callbackUrl: params.get("callbackUrl") || "/",
+  });
+
+  if (loginResult?.ok) {
+    Swal.fire("Success", "Registration and Login successful", "success");
+    router.push(params.get("callbackUrl") || "/");
   }
 };
+
+
   return (
     <div className="min-h-screen bg-slate-50 flex items-center justify-center p-6">
       <div className="w-full max-w-md bg-white rounded-3xl shadow-xl shadow-slate-200/60 p-8 border border-slate-100">
@@ -138,14 +148,7 @@ const onSubmit = async (data) => {
         </div>
 
         {/* Social Button */}
-        <button className="w-full flex cursor-pointer items-center justify-center gap-3 bg-white border border-slate-200 py-3 rounded-xl hover:bg-slate-50 transition-all font-medium text-slate-700">
-          <img
-            src="https://www.svgrepo.com/show/475656/google_color.svg"
-            className="w-5 h-5"
-            alt="Google"
-          />
-          Google
-        </button>
+        <SocialLogin></SocialLogin>
 
         {/* Footer */}
         <p className="text-center text-slate-600 mt-8 text-sm">
