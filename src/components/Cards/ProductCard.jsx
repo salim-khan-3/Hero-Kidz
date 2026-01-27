@@ -1,3 +1,4 @@
+"use client"
 import Image from "next/image";
 import { Star, ShoppingCart, Eye } from "lucide-react";
 import Link from "next/link"; // যদি View Details page এ navigate করতে চাও

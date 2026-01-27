@@ -1,12 +1,33 @@
 "use client"; // Interactive menu-r jonno eta dorkar
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { CiShoppingCart } from "react-icons/ci";
 import AuthButtons from "../buttons/AuthButtons";
+import { useSession } from "next-auth/react";
 
 const Navbar = () => {
+  const { data: session } = useSession();
+  const [cartCount, setCartCount] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
+
+useEffect(() => {
+  const fetchCartCount = async () => {
+    if (session?.user?.email) {
+      const res = await fetch(`/api/cart?email=${session.user.email}`);
+      const data = await res.json();
+      setCartCount(data.length);
+    }
+  };
+
+  fetchCartCount(); // প্রথমবার লোডের সময়
+
+  // কাস্টম ইভেন্ট লিসেনার যোগ করা
+  window.addEventListener("cartUpdate", fetchCartCount);
+
+  // ক্লিনআপ ফাংশন
+  return () => window.removeEventListener("cartUpdate", fetchCartCount);
+}, [session]);
 
   return (
     <nav className="bg-white shadow-md w-full z-10">
@@ -49,15 +70,15 @@ const Navbar = () => {
 
           <div className="flex items-center gap-4 ">
             <Link
-              href="/"
+              href="/cart"
               className="relative group p-2 bg-gray-100 hover:bg-blue-50 rounded-full transition-all duration-300 inline-flex items-center justify-center"
             >
               {/* Cart Icon */}
               <CiShoppingCart className="text-2xl text-gray-700 group-hover:text-blue-600 transition-colors" />
 
               {/* Notification Badge (Optional: Koyta item ache seta dekhate) */}
-              <span className="absolute -top-1 -right-1 bg-blue-600 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full border-2 border-white">
-                3
+              <span className="absolute -top-1 -right-1 bg-blue-600 text-white text-[10px] px-1.5 py-0.5 rounded-full">
+                {cartCount}
               </span>
             </Link>
 
