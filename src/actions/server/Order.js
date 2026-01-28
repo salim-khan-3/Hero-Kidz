@@ -1,4 +1,6 @@
-"use server"; // ETA OBOSSHOI DITE HOBE
+
+
+"use server";
 
 import { authOptions } from "@/lib/authOptions";
 import { getServerSession } from "next-auth";
@@ -13,7 +15,6 @@ export const createOrder = async (payload) => {
       return { success: false, message: "User not authenticated" };
     }
 
-    // Database connection function-er bhitore call korun
     const orderCollection = await dbConnect(collections.ORDER);
     const cart = await getCartItems();
 
@@ -31,11 +32,11 @@ export const createOrder = async (payload) => {
 
     const result = await orderCollection.insertOne(newOrder);
 
-    // Mongodb result check
-    if (Boolean(result.insertedId)) {
-      const result = await clearCart()
+    if (result.insertedId) {
+      await clearCart();
+      return { success: true, message: "Order placed successfully" };
     }
-    
+
     return { success: false, message: "Failed to save order" };
 
   } catch (error) {
@@ -43,4 +44,3 @@ export const createOrder = async (payload) => {
     return { success: false, message: "Something went wrong" };
   }
 };
-

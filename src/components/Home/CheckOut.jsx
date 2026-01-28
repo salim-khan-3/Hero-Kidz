@@ -1,19 +1,11 @@
 "use client";
 import { createOrder } from "@/actions/server/Order";
 import { useSession } from "next-auth/react";
-// import { createOrder } from "@/actions/server/Order";
 import React, { useMemo, useState } from "react";
 import Swal from "sweetalert2";
 
 const CheckOut = ({ cartItems = [] }) => {
   const session = useSession();
-  // const [formData, setFormData] = useState({
-  //   name: "",
-  //   email: "",
-  //   address: "",
-  //   instruction: "",
-  //   phone: "",
-  // });
   const totalItems = useMemo(() => {
     return cartItems.reduce((acc, item) => acc + item.quantity, 0);
   }, [cartItems]);
@@ -21,14 +13,6 @@ const CheckOut = ({ cartItems = [] }) => {
   const totalPrice = useMemo(() => {
     return cartItems.reduce((acc, item) => acc + item.quantity * item.price, 0);
   }, [cartItems]);
-
-  // const handleChange = (e) => {
-  //   const { name, value } = e.target;
-  //   setFormData((prev) => ({
-  //     ...prev,
-  //     [name]: value,
-  //   }));
-  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -43,10 +27,10 @@ const CheckOut = ({ cartItems = [] }) => {
     };
 
     const result = await createOrder(payload);
-    if(result.success) {
-    }else{
-      Swal.fire("error", "Something went wrong", "error")
-
+    if (result.success) {
+       Swal.fire("success", "Order added successfull", "success");
+    } else {
+      Swal.fire("error", "Something went wrong", "error");
     }
   };
 
