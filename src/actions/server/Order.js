@@ -2,7 +2,7 @@
 
 import { authOptions } from "@/lib/authOptions";
 import { getServerSession } from "next-auth";
-import { getCartItems } from "./cart";
+import { clearCart, getCartItems } from "./cart";
 import { dbConnect, collections } from "@/lib/dbConnect";
 
 export const createOrder = async (payload) => {
@@ -32,8 +32,8 @@ export const createOrder = async (payload) => {
     const result = await orderCollection.insertOne(newOrder);
 
     // Mongodb result check
-    if (result.insertedId) {
-      return { success: true, message: "Order placed successfully!" };
+    if (Boolean(result.insertedId)) {
+      const result = await clearCart()
     }
     
     return { success: false, message: "Failed to save order" };
@@ -44,29 +44,3 @@ export const createOrder = async (payload) => {
   }
 };
 
-// "use server";
-
-// import { authOptions } from "@/lib/authOptions";
-// import { getServerSession } from "next-auth";
-// import { dbConnect, collections } from "@/lib/dbConnect";
-
-// export async function createOrder(formData) {
-//   const session = await getServerSession(authOptions);
-//   const user = session?.user;
-
-//   if (!user) return { success: false };
-
-//   const orderCollection = await dbConnect(collections.ORDER);
-
-//   await orderCollection.insertOne({
-//     userId: user.id,
-//     name: formData.get("name"),
-//     email: formData.get("email"),
-//     address: formData.get("address"),
-//     instruction: formData.get("instruction"),
-//     phone: formData.get("phone"),
-//     createdAt: new Date(),
-//   });
-
-//   return { success: true };
-// }

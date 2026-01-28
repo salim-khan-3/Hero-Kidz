@@ -3,6 +3,7 @@ import { createOrder } from "@/actions/server/Order";
 import { useSession } from "next-auth/react";
 // import { createOrder } from "@/actions/server/Order";
 import React, { useMemo, useState } from "react";
+import Swal from "sweetalert2";
 
 const CheckOut = ({ cartItems = [] }) => {
   const session = useSession();
@@ -42,6 +43,11 @@ const CheckOut = ({ cartItems = [] }) => {
     };
 
     const result = await createOrder(payload);
+    if(result.success) {
+    }else{
+      Swal.fire("error", "Something went wrong", "error")
+
+    }
   };
 
   if (session.status == "loading") {
@@ -160,124 +166,3 @@ const CheckOut = ({ cartItems = [] }) => {
 };
 
 export default CheckOut;
-
-// "use client";
-
-// import { useState } from "react";
-
-// const CheckOut = ({cartItems}) => {
-//     const [formData, setFormData] = useState({
-//     name: "",
-//     email: "",
-//     address: "",
-//     product: "",
-//     quantity: 1,
-//   });
-
-//   const [submitted, setSubmitted] = useState(false);
-
-//   const handleChange = (e) => {
-//     const { name, value } = e.target;
-//     setFormData((prev) => ({ ...prev, [name]: value }));
-//   };
-
-//   const handleSubmit = (e) => {
-//     e.preventDefault();
-//     console.log("Order Confirmed:", formData);
-//     setSubmitted(true);
-//     // এখানে তুমি চাইলে API call করতে পারো
-//   };
-
-//   return (
-//     <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
-//       <div className="bg-white shadow-md rounded-lg p-8 w-full max-w-md">
-//         <h2 className="text-2xl font-bold mb-6 text-center">Order Confirmation</h2>
-
-//         {submitted ? (
-//           <div className="text-center">
-//             <p className="text-green-600 font-semibold mb-4">
-//               ✅ Your order has been confirmed!
-//             </p>
-//             <button
-//               onClick={() => setSubmitted(false)}
-//               className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-//             >
-//               Place New Order
-//             </button>
-//           </div>
-//         ) : (
-//           <form onSubmit={handleSubmit} className="space-y-4">
-//             <div>
-//               <label className="block mb-1 font-medium">Name</label>
-//               <input
-//                 type="text"
-//                 name="name"
-//                 value={formData.name}
-//                 onChange={handleChange}
-//                 required
-//                 className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-//               />
-//             </div>
-
-//             <div>
-//               <label className="block mb-1 font-medium">Email</label>
-//               <input
-//                 type="email"
-//                 name="email"
-//                 value={formData.email}
-//                 onChange={handleChange}
-//                 required
-//                 className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-//               />
-//             </div>
-
-//             <div>
-//               <label className="block mb-1 font-medium">Address</label>
-//               <textarea
-//                 name="address"
-//                 value={formData.address}
-//                 onChange={handleChange}
-//                 required
-//                 className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-//               />
-//             </div>
-
-//             <div>
-//               <label className="block mb-1 font-medium">Product</label>
-//               <input
-//                 type="text"
-//                 name="product"
-//                 value={formData.product}
-//                 onChange={handleChange}
-//                 required
-//                 className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-//               />
-//             </div>
-
-//             <div>
-//               <label className="block mb-1 font-medium">Quantity</label>
-//               <input
-//                 type="number"
-//                 name="quantity"
-//                 value={formData.quantity}
-//                 onChange={handleChange}
-//                 min="1"
-//                 required
-//                 className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-//               />
-//             </div>
-
-//             <button
-//               type="submit"
-//               className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
-//             >
-//               Confirm Order
-//             </button>
-//           </form>
-//         )}
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default CheckOut;
