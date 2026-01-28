@@ -16,67 +16,27 @@ const AddToCartBtn = ({ product }) => {
 
 
   const addToCart = async() => {
-    // if(status === "authenticated"){
-    // Swal.fire({
-    //     title: "Success!",
-    //     text: `${product?.title} added to cart!`,
-    //     icon: "success",
-    //     timer: 2000,
-    //     showConfirmButton: false
-    //   });
-    //   console.log("Product ID:", product._id);
-    //   console.log("User Email:", session.user.email);
-    // }else {
-    //   Swal.fire({
-    //     title: "Login Required",
-    //     text: "Please login to add items to your cart.",
-    //     icon: "info",
-    //     confirmButtonText: "Login Now",
-    //     showCancelButton: true,
-    //   }).then((result) => {
-    //     if(result.isConfirmed){
-    //       router.push(`/login?callbackUrl=${path}`);
-    //     }
-    //   })
-    // }
+ 
 
-if(isLogin) {
-  const result = await handleAddToCart({product, inc:true});
-  if(result.success) {
-  }else{
-    
-    Swal.fire("opps", "something went wrong", "error")
+if (isLogin) {
+  const result = await handleAddToCart({ product, inc: true });
+
+  if (result.success) {
+    Swal.fire({
+      title: "Added!",
+      text: `${product?.title} added to cart`,
+      icon: "success",
+      timer: 1500,
+      showConfirmButton: false,
+    });
+  } else {
+    Swal.fire("Oops!", "Something went wrong", "error");
   }
-}else{
+}
+else{
   router.push(`/login?callbackUrl=${path}`);
 }
   };
-
-//   const addToCart = async () => {
-//   if (status === "authenticated") {
-//     // API কল করা হচ্ছে
-//     const res = await fetch("/api/cart", {
-//       method: "POST",
-//       body: JSON.stringify({
-//         email: session.user.email,
-//         productId: product._id,
-//         productTitle: product.title,
-//         price: product.price,
-//         image: product.image
-//       }),
-//       headers: { "Content-Type": "application/json" }
-//     });
-
-//     if (res.ok) {
-//       Swal.fire({ title: "Added!", icon: "success", timer: 1000 });
-//       // এখানে আপনি চাইলে উইন্ডো রিলোড বা স্টেট আপডেট করতে পারেন কার্ট কাউন্ট দেখানোর জন্য
-//       window.dispatchEvent(new Event("cartUpdate"));
-//     }
-//   } else {
-//     router.push(`/login?callbackUrl=${path}`);
-//   }
-// };
-
 
 
   return (
